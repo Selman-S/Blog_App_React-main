@@ -46,7 +46,7 @@ const PostDetails = () => {
     getOneBlog(state.slug)
   }, [])
 
-  const base_url = "http://127.0.0.1:8000/"
+  const base_url = "https://stocks.pythonanywhere.com/"
 
   const token = window.atob(sessionStorage.getItem('token'));
 
