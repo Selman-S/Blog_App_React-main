@@ -37,6 +37,14 @@ const Home = () => {
   }
   return (
     <Box>
+      <img
+       src={`https://images.pexels.com/photos/237272/pexels-photo-237272.jpeg`}
+      height="600"
+      width="100%"
+       alt="Burger"
+       style={{objectFit:'cover'}}
+       loading="lazy"
+     />
       <Box style={{ margin: "2px auto" }}>
         <Box spacing={2}>
           <Box xs={12} md={6} lg={4} xl={3} sx={{ my:3, display:"flex", justifyContent:"center", gap:3, flexWrap:"wrap", mx: "auto" }}>

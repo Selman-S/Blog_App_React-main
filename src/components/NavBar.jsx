@@ -30,7 +30,7 @@ const NavBar = () => {
   const handleOpenUserMenu = event => {
     setAnchorElUser(event.currentTarget)
   }
-
+  
   const handleCloseNavMenu = e => {
     setAnchorElNav(null)
     if (e.target.innerText.toLocaleLowerCase() === 'new blog') {
@@ -39,16 +39,18 @@ const NavBar = () => {
       navigate('/about')
     }
   }
-
+  
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
-
+  
   return (
-    <AppBar position="static">
+    <AppBar position="absolute" color="transparent" >
+      <Box sx={{opacity:.1,position:'absolute',width:'100%',backgroundColor:"black",top:0,left:0,height:'69px'}}> </Box>
+
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+
           <Typography
             variant="h6"
             noWrap
@@ -56,15 +58,16 @@ const NavBar = () => {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              fontFamily: 'Dancing Script',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
               cursor: 'pointer',
             }}
+     
           >
-            LOGO
+            SELMAN
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -74,8 +77,8 @@ const NavBar = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
-            >
+              sx={{color:"white"}}
+              >
               <MenuIcon />
             </IconButton>
             <Menu
@@ -95,7 +98,7 @@ const NavBar = () => {
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
-            >
+              >
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">New Blog</Typography>
               </MenuItem>
@@ -104,10 +107,7 @@ const NavBar = () => {
               </MenuItem>
             </Menu>
           </Box>
-          <AdbIcon
-            sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
-            onClick={() => navigate('/')}
-          />
+         
           <Typography
             variant="h5"
             noWrap
@@ -116,26 +116,29 @@ const NavBar = () => {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: 'Dancing Script',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'white',
               textDecoration: 'none',
+              cursor: 'pointer'
             }}
-          >
-            LOGO
+            >
+            SELMAN
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
               onClick={e => handleCloseNavMenu(e)}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
+              
+              sx={{ my: 2, color: 'white', display: 'block',}}
+
+              >
               New Blog
             </Button>{' '}
             <Button
               onClick={e => handleCloseNavMenu(e)}
               sx={{ my: 2, color: 'white', display: 'block' }}
-            >
+              >
               About
             </Button>
           </Box>
@@ -161,22 +164,22 @@ const NavBar = () => {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
-            >
+              >
               {settings.map(setting => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   {setting === 'Logout' ? (
                     <Typography
-                      onClick={() => logOut(navigate)}
-                      textAlign="center"
+                    onClick={() => logOut(navigate)}
+                    textAlign="center"
                     >
                       {setting}
                     </Typography>
                   ) : (
                     <Typography
-                      onClick={() =>
-                        navigate(`/${setting.toLocaleLowerCase()}`)
-                      }
-                      textAlign="center"
+                    onClick={() =>
+                      navigate(`/${setting.toLocaleLowerCase()}`)
+                    }
+                    textAlign="center"
                     >
                       {setting}
                     </Typography>
@@ -187,6 +190,7 @@ const NavBar = () => {
           </Box>
         </Toolbar>
       </Container>
+            
     </AppBar>
   )
 }
