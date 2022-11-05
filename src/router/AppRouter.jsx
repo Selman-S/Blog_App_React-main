@@ -9,6 +9,7 @@ import {
 import NavBar from '../components/NavBar'
 import { AuthContext } from '../context/AuthContext'
 import About from '../pages/About'
+import ContactUs from '../pages/ContactUs'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import MyPosts from '../pages/MyPosts'
@@ -31,6 +32,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/contact" element={<ContactUs />}></Route>
 
         <Route path="/newblog" element={<PrivateRouter />}>
           <Route path="" element={<NewBlog />} />
