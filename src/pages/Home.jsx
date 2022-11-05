@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { BlogContext } from '../context/BlogContext'
 import Card from '@mui/material/Card'
@@ -11,21 +11,20 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import { Badge, Box, Button, Grid } from '@mui/material'
+import { Badge, Box, Button, Paper, Stack } from '@mui/material'
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 import { useNavigate } from 'react-router-dom'
 import { toastErrorNotify } from '../helper/ToastNotify'
 import Carousel from 'react-material-ui-carousel'
-import { Paper } from '@mui/material'
+import { items } from '../helper/data'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
-import { BsAppIndicator } from 'react-icons/bs'
-import { grey } from '@mui/material/colors'
-import { ThemeContext } from '../context/ThemeContext'
+
 
 const Home = () => {
-  const { theme } = useContext(ThemeContext)
   const { currentUser } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const [selectedCategory, setSelectedCategory] = useState('View All');
 
   const { getBlogs, blogs, getCategory, categories, page, setPage } =
     useContext(BlogContext)
@@ -34,8 +33,7 @@ const Home = () => {
     getBlogs()
     getCategory()
   }, [page])
-  console.log(theme.palette.primary.dark)
-  const navigate = useNavigate()
+
   const openDetails = slug => {
     if (!currentUser) {
       toastErrorNotify('Login for details of blog!')
@@ -43,34 +41,7 @@ const Home = () => {
       navigate(`/details/${slug}`, { state: { slug } })
     }
   }
-  var items = [
-    {
-      name: 'The five independent cottage rentals voted best in the UK by holidaymakers',
-      description:
-        "All of the firms at the top have fewer than 1,500 properties, while some of the country's biggest cottage rental companies failed to even make the top 10 in a survey, Wales Online reports. The Landmark Trust - a charity that restores old, historical buildings and transforms them into holiday rentals - came out on top.",
-      image: 'https://images.pexels.com/photos/237272/pexels-photo-237272.jpeg',
-      date: '27 Aug 2022',
-      category: 'holiday',
-    },
-    {
-      name: 'Peatland ‘core domain sets’ to streamline measurement and reporting',
-      description:
-        'The world’s peatlands are vital for combating climate change, thanks to their vast carbon stores. But researchers and policymakers can’t make the most of their value if that isn’t measured, monitored and reported consistently.',
-      image:
-        'https://images.unsplash.com/photo-1618089086953-c1b3b2b6f19c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      date: '12 Oct 2022',
-      category: 'Forest',
-    },
-    {
-      name: 'Great Blakenham landfill site end date set to pave way for Valley Ridge',
-      description:
-        'Masons Landfill is a 70-hectare former quarry where waste operations have been ongoing since the 1990s. It accepts non-hazardous business and household waste, as well as hazardous waste such as asbestos - one of two sites in the county that does.',
-      image:
-        'https://images.pexels.com/photos/221455/pexels-photo-221455.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      date: '08.01.2022',
-      category: 'Advanture',
-    },
-  ]
+  console.log(categories)
   return (
     <Box>
       <Carousel
@@ -94,7 +65,7 @@ const Home = () => {
         indicatorIconButtonProps={{
           style: {
             color: 'rgba(255, 255, 255, 0.6)',
-        
+            width: 22,
           },
         }}
         activeIndicatorIconButtonProps={{
@@ -105,11 +76,10 @@ const Home = () => {
         indicatorContainerProps={{
           style: {
             position: 'absolute',
-            left:0,
-            // left: '-35%',
-            // top: {xs:'550px'},
-            top:'520px',
+            left: 0,
+            top: '530px',
             zIndex: '2',
+            width: 200,
           },
         }}
         animation="slide"
@@ -128,8 +98,8 @@ const Home = () => {
               sx={{
                 mx: 2,
                 color: 'white',
-                top: { xs: 170 },
-                left: { xs: 10 },
+                top: { xs: 170, md: 278 },
+                left: { xs: 10, md: 70 },
                 position: 'absolute',
                 zIndex: 2,
                 backgroundColor: 'rgba(255, 255, 255, 0.149)',
@@ -143,8 +113,8 @@ const Home = () => {
             <Typography
               sx={{
                 position: 'absolute',
-                top: { xs: 200 },
-                left: { xs: 20 },
+                top: { xs: 200, md: 315 },
+                left: { xs: 20, md: 70 },
                 color: 'white',
                 fontFamily: 'Lora',
                 fontSize: { xs: '24px' },
@@ -152,7 +122,7 @@ const Home = () => {
                 letterSpacing: 0,
                 textAlign: 'left',
                 fontWeight: '700',
-                maxWidth:600 
+                maxWidth: 600,
               }}
             >
               {item.name}
@@ -160,8 +130,8 @@ const Home = () => {
             <Box
               sx={{
                 position: 'absolute',
-                top: { xs: 300 },
-                left: { xs: 20 },
+                top: { xs: 350, md: 422 },
+                left: { xs: 20, md: 70 },
                 color: '#E5E5E5',
                 fontFamily: 'Lora',
                 fontSize: { xs: '16px' },
@@ -174,7 +144,12 @@ const Home = () => {
               }}
             >
               <Typography sx={{ minWidth: 100 }}>{item.date}</Typography>
-              <Box sx={{ position: 'relative',display:{xs:'none',sm:'block'} }}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
                 <Box
                   sx={{
                     position: 'absolute',
@@ -185,12 +160,71 @@ const Home = () => {
                   }}
                 />
               </Box>
-              <Typography sx={{ ml:{xs:0,sm:6},maxWidth:500 }}>{item.description}</Typography>
+              <Typography sx={{ ml: { xs: 0, sm: 6 }, maxWidth: 500 }}>
+                {item.description}
+              </Typography>
             </Box>
           </Box>
         ))}
       </Carousel>
-      <Box style={{ margin: '2px auto' }}>
+      <Box sx={{ m: '100px 70px', border: '1px solid red' }}>
+        <Typography
+          component="h2"
+          sx={{
+            fontWeight: 700,
+            fontSize: '36px',
+            lineHeight: '46px',
+            fontFamily: 'Lora',
+            color: '#495057',
+          }}
+        >
+          Popular topics
+        </Typography>
+        <Stack
+          sx={{
+            flexDirection: 'row',
+            mt: '30px',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Stack sx={{ flexDirection: 'row', gap: '20px', fontFamily: 'Lora' }}>
+          
+            {categories.map(c => {
+              return (
+                <Typography
+                  sx={{
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    fontSize: '16px',
+                    lineHeight: '25px',
+                    color: selectedCategory===c.name?'#D4A373':'#495057',
+                    fontFamily: 'Lora',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() =>setSelectedCategory(c.name)}
+                >
+                  {c.name}
+                </Typography>
+              )
+            })}
+          </Stack>
+          <Stack>
+          <Typography
+              sx={{
+                fontStyle: 'normal',
+                fontWeight: 700,
+                fontSize: '16px',
+                lineHeight: '25px',
+                color: selectedCategory==='View All'?'#D4A373':'#495057',
+                fontFamily: 'Lora',
+                cursor: 'pointer'
+              }}
+              onClick={() =>setSelectedCategory('View All')}
+            >
+              View All
+            </Typography>
+          </Stack>
+        </Stack>
         <Box spacing={2}>
           <Box
             xs={12}
