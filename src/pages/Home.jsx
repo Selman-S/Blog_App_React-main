@@ -11,7 +11,17 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import { Badge, Box, Button, Paper, Stack } from '@mui/material'
+import {
+  Badge,
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+} from '@mui/material'
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 import { useNavigate } from 'react-router-dom'
@@ -20,11 +30,11 @@ import Carousel from 'react-material-ui-carousel'
 import { items } from '../helper/data'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 
-
 const Home = () => {
+  const [selectedCategory, setSelectedCategory] = useState('View All')
+  const [filtered, setFiltered] = useState([]);
   const { currentUser } = useContext(AuthContext)
   const navigate = useNavigate()
-  const [selectedCategory, setSelectedCategory] = useState('View All');
 
   const { getBlogs, blogs, getCategory, categories, page, setPage } =
     useContext(BlogContext)
@@ -32,7 +42,8 @@ const Home = () => {
   useEffect(() => {
     getBlogs()
     getCategory()
-  }, [page])
+    setFiltered(blogs)
+  }, [])
 
   const openDetails = slug => {
     if (!currentUser) {
@@ -41,7 +52,25 @@ const Home = () => {
       navigate(`/details/${slug}`, { state: { slug } })
     }
   }
-  console.log(categories)
+  console.log(blogs)
+
+  const handleChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const filterBlogs = ()=> {
+    if(selectedCategory ==='View All'){
+      setFiltered(blogs)
+      console.log('all');
+    }else {
+      const filtered = blogs.filter((b)=> b.category===selectedCategory)
+   
+      setFiltered(filtered)
+    }
+  }
+  useEffect(() => {
+    filterBlogs()
+  }, [selectedCategory]);
   return (
     <Box>
       <Carousel
@@ -167,13 +196,13 @@ const Home = () => {
           </Box>
         ))}
       </Carousel>
-      <Box sx={{ m: '100px 70px', border: '1px solid red' }}>
+      <Box sx={{ m: { md: '100px 70px' }}}>
         <Typography
           component="h2"
           sx={{
             fontWeight: 700,
-            fontSize: '36px',
-            lineHeight: '46px',
+            fontSize: { xs: '28px', sm: '36px' },
+            lineHeight: { xs: '36px', sm: '46px' },
             fontFamily: 'Lora',
             color: '#495057',
           }}
@@ -182,13 +211,13 @@ const Home = () => {
         </Typography>
         <Stack
           sx={{
+            display: { xs: 'none', md: 'flex' },
             flexDirection: 'row',
             mt: '30px',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Stack sx={{ flexDirection: 'row', gap: '20px', fontFamily: 'Lora' }}>
-          
             {categories.map(c => {
               return (
                 <Typography
@@ -197,11 +226,11 @@ const Home = () => {
                     fontWeight: 700,
                     fontSize: '16px',
                     lineHeight: '25px',
-                    color: selectedCategory===c.name?'#D4A373':'#495057',
+                    color: selectedCategory === c.name ? '#D4A373' : '#495057',
                     fontFamily: 'Lora',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
-                  onClick={() =>setSelectedCategory(c.name)}
+                  onClick={() => setSelectedCategory(c.name)}
                 >
                   {c.name}
                 </Typography>
@@ -209,22 +238,65 @@ const Home = () => {
             })}
           </Stack>
           <Stack>
-          <Typography
+            <Typography
               sx={{
                 fontStyle: 'normal',
                 fontWeight: 700,
                 fontSize: '16px',
                 lineHeight: '25px',
-                color: selectedCategory==='View All'?'#D4A373':'#495057',
+                color: selectedCategory === 'View All' ? '#D4A373' : '#495057',
                 fontFamily: 'Lora',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
-              onClick={() =>setSelectedCategory('View All')}
+              onClick={() => setSelectedCategory('View All')}
             >
               View All
             </Typography>
           </Stack>
         </Stack>
+        <Box sx={{ display: { xs: 'block', md: 'none' },}}>
+          <Stack
+           sx={{
+            flexDirection: 'row',
+            mt: '30px',
+            justifyContent: 'space-between',
+          }}>
+
+          <Stack>
+
+          <FormControl size="small" sx={{ m: 1, minWidth: 160 }}>
+            <InputLabel id="filter-category">Filter Category</InputLabel>
+            <Select
+              labelId="filter-category"
+              id="simple-select"
+              label="Filter Category"
+              onChange={handleChange}
+              defaultValue="View All"
+              >
+                {categories.map(c => <MenuItem sx={{color:selectedCategory===c.name && '#D4A373'}} value={c.name}>{c.name}</MenuItem>)}
+              
+        
+            </Select>
+          </FormControl>
+              </Stack>
+          <Stack>
+            <Typography
+              sx={{
+                fontStyle: 'normal',
+                fontWeight: 700,
+                fontSize: '16px',
+                lineHeight: '25px',
+                color: selectedCategory === 'View All' ? '#D4A373' : '#495057',
+                fontFamily: 'Lora',
+                cursor: 'pointer',
+              }}
+              onClick={() => setSelectedCategory('View All')}
+              >
+              View All
+            </Typography>
+          </Stack>
+              </Stack>
+        </Box>
         <Box spacing={2}>
           <Box
             xs={12}
@@ -240,7 +312,7 @@ const Home = () => {
               mx: 'auto',
             }}
           >
-            {blogs.map(blog => (
+            {filtered?.map(blog => (
               <Card sx={{ width: 345, height: 457, position: 'relative' }}>
                 <CardHeader
                   avatar={
