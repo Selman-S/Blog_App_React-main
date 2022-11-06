@@ -17,28 +17,30 @@ import { useNavigate } from 'react-router-dom'
 import { toastErrorNotify } from '../helper/ToastNotify'
 import CarouselCom from '../components/Carousel'
 import Cards from '../components/Cards'
+import { middleBlog } from '../helper/data'
+import MiddleBlog from '../components/MiddleBlog'
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('View All')
   const [filtered, setFiltered] = useState([])
-  const [page, setPage] = useState(1);
-  
+  const [page, setPage] = useState(1)
+ 
   const { currentUser } = useContext(AuthContext)
   const navigate = useNavigate()
-  
+
   const { getBlogs, blogs, getCategory, categories, loading } =
-  useContext(BlogContext)
+    useContext(BlogContext)
 
   useEffect(() => {
     getBlogs()
     getCategory()
   }, [])
-  
+
   useEffect(() => {
     setFiltered(blogs)
     filterBlogs()
   }, [selectedCategory, blogs])
-  
+
   const openDetails = slug => {
     if (!currentUser) {
       toastErrorNotify('Login for details of blog!')
@@ -51,9 +53,8 @@ const Home = () => {
     setPage(1)
   }
   const handlePaginationChange = (event, value) => {
-  
-    setPage(value);
-  };
+    setPage(value)
+  }
 
   const filterBlogs = () => {
     if (selectedCategory === 'View All' && blogs.length !== 0) {
@@ -192,22 +193,19 @@ const Home = () => {
             </Box>
           ) : (
             filtered?.map((blog, i) => {
-
-              if (i<page*8 && i >= (page-1)*8){
-
-                return  (
+              if (i < page * 8 && i >= (page - 1) * 8) {
+                return (
                   <>
-                <Cards
-                  key={i}
-                  blog={blog}
-                  openDetails={openDetails}
-                  currentUser={currentUser}
-                  />
-              </>
-            )
-          }
-          } 
-            )
+                    <Cards
+                      key={i}
+                      blog={blog}
+                      openDetails={openDetails}
+                      currentUser={currentUser}
+                    />
+                  </>
+                )
+              }
+            })
           )}
         </Grid>
         <Stack spacing={2}>
@@ -219,6 +217,7 @@ const Home = () => {
           />
         </Stack>
       </Box>
+      <MiddleBlog />
     </Box>
   )
 }
