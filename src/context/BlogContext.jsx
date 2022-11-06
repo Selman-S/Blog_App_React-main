@@ -15,7 +15,8 @@ const BlogContextProvider = (props) => {
 
   const [categories, setCategories] = useState([]);
 
-  const [page, setPage] = useState(1000);
+
+  const [limit, setLimit] = useState(1000);
 
   const [userPosts, setUserPosts] = useState([]);
 
@@ -23,7 +24,7 @@ const BlogContextProvider = (props) => {
 
   const getBlogs = async () => {
 
-    const blogUrl = base_url + `api/posts/?limit=${page}&offset=0`
+    const blogUrl = base_url + `api/posts/?limit=${limit}&offset=0`
     try {
       const res = await axios.get(blogUrl)
       setBlogs(res.data.results)
@@ -193,8 +194,6 @@ const BlogContextProvider = (props) => {
     getCategory,
     categories,
     createPost,
-    page,
-    setPage,
     updatePost,
     deletePost,
     usersAllPosts,
