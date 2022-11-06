@@ -149,29 +149,30 @@ const NavBar = () => {
               flexGrow: 1,
               display: { xs: 'none', md: 'flex' },
               justifyContent: 'end',
+              fontFamily:'Lora'
             }}
           >
             <Button
               onClick={e => handleCloseNavMenu(e)}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, color: 'white', display: 'block' , fontFamily:'Lora'}}
             >
               Home
             </Button>
             <Button
               onClick={e => handleCloseNavMenu(e)}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, color: 'white', display: 'block', fontFamily:'Lora' }}
             >
               New Blog
             </Button>{' '}
             <Button
               onClick={e => handleCloseNavMenu(e)}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, color: 'white', display: 'block', fontFamily:'Lora' }}
             >
               About
             </Button>{' '}
             <Button
               onClick={e => handleCloseNavMenu(e)}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, color: 'white', display: 'block', fontFamily:'Lora' }}
             >
               Contact us
             </Button>

@@ -17,6 +17,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Paper,
@@ -30,6 +31,7 @@ import { toastErrorNotify } from '../helper/ToastNotify'
 import Carousel from 'react-material-ui-carousel'
 import { items } from '../helper/data'
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
+import Cards from '../components/Cards'
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('View All')
@@ -125,8 +127,12 @@ const Home = () => {
             />
             <Box
               sx={{
-                width: {xs:'90%',sm:'590px', md: '800px', lg: '1100px', xl: '1400px' },
-          
+                width: {
+                  xs: '95%',
+                  sm: '80%',
+                  xl: '75%',
+                },
+
                 zIndex: 2,
                 position: 'absolute',
                 top: { xs: 170, sm: 278 },
@@ -134,18 +140,16 @@ const Home = () => {
                 transform: 'translate(-50%, 0%)',
               }}
             >
-              {/* top: { xs: 170, md: 278 },
-                  left: { xs: 10, md: 'auto' }, */}
               <Box
                 sx={{
                   mx: 2,
                   color: 'white',
                   display: 'inline',
-
                   zIndex: 2,
                   backgroundColor: 'rgba(255, 255, 255, 0.149)',
                   padding: '5px 10px',
                   borderRadius: '8px',
+                  fontFamily: 'Lora',
                   fontSize: { xs: '10px' },
                 }}
               >
@@ -179,10 +183,11 @@ const Home = () => {
                   textAlign: 'left',
                   fontWeight: '400',
                   fontStyle: 'normal',
+                 
                   display: { xs: 'block', sm: 'flex' },
                 }}
               >
-                <Typography sx={{ minWidth: 100 }}>{item.date}</Typography>
+                <Typography sx={{ minWidth: 100 ,fontFamily: 'Lora',}}>{item.date}</Typography>
                 <Box
                   sx={{
                     position: 'relative',
@@ -199,7 +204,7 @@ const Home = () => {
                     }}
                   />
                 </Box>
-                <Typography sx={{ ml: { xs: 0, sm: 6 }, maxWidth: 500 }}>
+                <Typography sx={{ ml: { xs: 0, sm: 6 }, maxWidth: 500 ,fontFamily: 'Lora',}}>
                   {item.description}
                 </Typography>
               </Box>
@@ -207,7 +212,16 @@ const Home = () => {
           </Box>
         ))}
       </Carousel>
-      <Box sx={{ m: {xs:'50px auto',md:'100px auto' },width: {xs:'95%',sm:'590px', md: '800px', lg: '1100px', xl: '1400px' },border:'1px solid red' }}>
+      <Box
+        sx={{
+          m: { xs: '50px auto', md: '100px auto' },
+          width: {
+            xs: '95%',
+            sm: '80%',
+            xl: '75%',
+          },
+        }}
+      >
         <Typography
           component="h2"
           sx={{
@@ -313,128 +327,17 @@ const Home = () => {
             </Stack>
           </Stack>
         </Box>
-        <Box spacing={2}>
-          <Box
-            xs={12}
-            md={6}
-            lg={4}
-            xl={3}
-            sx={{
-              my: 3,
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 3,
-              flexWrap: 'wrap',
-              mx: 'auto',
-            }}
-          >
-            {loading ? (
-              <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-              </Box>
-            ) : (
-              filtered?.map(blog => (
-                <Card sx={{ width: 345, height: 457, position: 'relative' }}>
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        alt="Emre Sharp"
-                        aria-label="blog"
-                        sx={{ bgcolor: red[500] }}
-                      />
-                    }
-                    title={blog.author}
-                    subheader={blog.last_updated_date.slice(0, 10)}
-                  />
-                  <div
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => openDetails(blog.slug)}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="194"
-                      image={blog.image}
-                      alt={blog.title}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {blog.title}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          display: '-webkit-box',
-                          WebkitLineClamp: '3',
-                          WebkitBoxOrient: 'vertical',
-                        }}
-                        variant="body2"
-                        color="text.secondary"
-                      >
-                        {blog.content}
-                      </Typography>
-                    </CardContent>
-                  </div>
-                  <CardActions
-                    disableSpacing
-                    sx={{
-                      width: '90%',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      position: 'absolute',
-                      bottom: '5px',
-                      left: '5px',
-                    }}
-                  >
-                    <div>
-                      <IconButton aria-label="add to favorites">
-                        <FavoriteIcon
-                          sx={{
-                            color:
-                              blog.like_post?.filter(
-                                like => like.user_id === currentUser.id
-                              )[0]?.user_id && 'red',
-                          }}
-                        />
-                        <Typography sx={{ marginLeft: 1 }}>
-                          {blog.like_count}
-                        </Typography>
-                      </IconButton>
-                      <IconButton aria-label="comment">
-                        <ChatOutlinedIcon />
-                        <Typography sx={{ marginLeft: 1 }}>
-                          {blog.comment_count}
-                        </Typography>
-                      </IconButton>
-                      <IconButton aria-label="view">
-                        <RemoveRedEyeOutlinedIcon />
-                        <Typography sx={{ marginLeft: 1 }}>
-                          {blog.post_view_count}
-                        </Typography>
-                      </IconButton>
-                    </div>
-                    <div>
-                      <Badge
-                        badgeContent={blog.category}
-                        color="primary"
-                        sx={{ mx: 2 }}
-                      />
-                    </div>
-                  </CardActions>
-                </Card>
-              ))
-            )}
-          </Box>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => setPage(page + 6)}
-          >
-            View More...
-          </Button>
-        </Box>
+        <Grid container spacing={2.5} sx={{ mt: 1 }}>
+          {loading ? (
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            filtered?.map(blog => (
+              <Cards  blog={blog} openDetails={openDetails} currentUser={currentUser}/>
+            ))
+          )}
+        </Grid>
       </Box>
     </Box>
   )
