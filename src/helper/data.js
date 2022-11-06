@@ -78,3 +78,32 @@ export const middleBlog = [
   },
 
 ]
+
+
+export const picks = [
+  {
+    id:1,
+    title:'The mountains are good for the soul',
+    description:'I have never in my life claimed to be an adventurer or outdoors lover – until I started hiking in the mountains. ',
+    date: '07.07.2021',
+    category:'Mountain',
+    image: 'https://images.pexels.com/photos/618833/pexels-photo-618833.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  },
+  {
+    id:2,
+    title:'Housekeeping: Tech Column Returns Next Week',
+    description:"Cary will return soon -- we hope for next week. This is just an FYI that the column hasnt been shelved.",
+    category: 'Cars',
+    date: '25.07.2016',
+    image: 'https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  },
+{
+    id:3,
+    title:'Every now and then, explorers need to find something intriguing to hold on to',
+    description:"The feeling to see something fascinating satisfies your hearts and soul and makes you crave for more. Explore these 5 Natural Wonders in India, which are absolutely amazing and help re-connect humans with nature",
+    date: '18.09.2013',
+    category: 'Holiday',
+    image: 'https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  },
+
+]
