@@ -146,6 +146,7 @@ const BlogsSec = ({
             <CircularProgress />
           </Box>
         ) : (
+          // eslint-disable-next-line array-callback-return
           filtered?.map((blog, i) => {
             if (i < page * 8 && i >= (page - 1) * 8) {
               return (

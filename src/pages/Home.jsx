@@ -7,7 +7,8 @@ import { toastErrorNotify } from '../helper/ToastNotify'
 import CarouselCom from '../components/Carousel'
 import MiddleBlog from '../components/MiddleBlog'
 import BlogsSec from '../components/BlogsSec'
-import {picks} from '../helper/data'
+import EditorPick from '../components/EditorPick'
+
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('View All')
@@ -75,46 +76,7 @@ const Home = () => {
       />
 
       <MiddleBlog />
-      <Box
-        sx={{
-          m: { xs: '50px auto', md: '100px auto' },
-          width: {
-            xs: '95%',
-            sm: '80%',
-            xl: '75%',
-          },
-      
-        }}
-      >
-        {' '}
-        <Typography
-          component="h2"
-          sx={{
-            fontWeight: 700,
-            fontSize: { xs: '28px', sm: '36px' },
-            lineHeight: { xs: '36px', sm: '46px' },
-            fontFamily: 'Lora',
-            color: '#495057',
-          }}
-        >
-          Editor’s Pick
-        </Typography>
-        <Grid container spacing={2.5} sx={{ mt: {xs:2,md:5} }}>
-          {picks.map((p) =>(
-<Grid item xs={12} md={6} lg={4} xl={4}>
-
-
-            <CardMedia
-            component="img"
-            height="350"
-            image={p.image}
-            alt={p.title}
-            sx={{ borderRadius: 2 }}
-            />
-            </Grid>
-            ))}
-        </Grid>
-      </Box>
+      <EditorPick />
     </Box>
   )
 }
