@@ -15,6 +15,7 @@ import {
   Badge,
   Box,
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -32,18 +33,23 @@ import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('View All')
-  const [filtered, setFiltered] = useState([]);
+  const [filtered, setFiltered] = useState([])
+
   const { currentUser } = useContext(AuthContext)
   const navigate = useNavigate()
 
-  const { getBlogs, blogs, getCategory, categories, page, setPage } =
+  const { getBlogs, blogs, getCategory, categories, page, setPage, loading } =
     useContext(BlogContext)
 
   useEffect(() => {
     getBlogs()
     getCategory()
-    setFiltered(blogs)
   }, [])
+
+  useEffect(() => {
+    setFiltered(blogs)
+    filterBlogs()
+  }, [selectedCategory, blogs])
 
   const openDetails = slug => {
     if (!currentUser) {
@@ -52,25 +58,20 @@ const Home = () => {
       navigate(`/details/${slug}`, { state: { slug } })
     }
   }
-  console.log(blogs)
+  const handleChange = event => {
+    setSelectedCategory(event.target.value)
+  }
 
-  const handleChange = (event) => {
-    setSelectedCategory(event.target.value);
-  };
-
-  const filterBlogs = ()=> {
-    if(selectedCategory ==='View All'){
+  const filterBlogs = () => {
+    if (selectedCategory === 'View All' && blogs.length !== 0) {
       setFiltered(blogs)
-      console.log('all');
-    }else {
-      const filtered = blogs.filter((b)=> b.category===selectedCategory)
-   
+    } else {
+      const filtered = blogs.filter(b => b.category === selectedCategory)
+      console.log(filtered)
       setFiltered(filtered)
     }
   }
-  useEffect(() => {
-    filterBlogs()
-  }, [selectedCategory]);
+  console.log(filtered)
   return (
     <Box>
       <Carousel
@@ -108,7 +109,6 @@ const Home = () => {
             left: 0,
             top: '530px',
             zIndex: '2',
-            width: 200,
           },
         }}
         animation="slide"
@@ -125,78 +125,89 @@ const Home = () => {
             />
             <Box
               sx={{
-                mx: 2,
-                color: 'white',
-                top: { xs: 170, md: 278 },
-                left: { xs: 10, md: 70 },
-                position: 'absolute',
+                width: {xs:'90%',sm:'590px', md: '800px', lg: '1100px', xl: '1400px' },
+          
                 zIndex: 2,
-                backgroundColor: 'rgba(255, 255, 255, 0.149)',
-                padding: '5px 10px',
-                borderRadius: '8px',
-                fontSize: { xs: '10px' },
-              }}
-            >
-              {item.category.toUpperCase()}
-            </Box>
-            <Typography
-              sx={{
                 position: 'absolute',
-                top: { xs: 200, md: 315 },
-                left: { xs: 20, md: 70 },
-                color: 'white',
-                fontFamily: 'Lora',
-                fontSize: { xs: '24px' },
-                lineHeight: { xs: '32px' },
-                letterSpacing: 0,
-                textAlign: 'left',
-                fontWeight: '700',
-                maxWidth: 600,
+                top: { xs: 170, sm: 278 },
+                left: '50%',
+                transform: 'translate(-50%, 0%)',
               }}
             >
-              {item.name}
-            </Typography>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: { xs: 350, md: 422 },
-                left: { xs: 20, md: 70 },
-                color: '#E5E5E5',
-                fontFamily: 'Lora',
-                fontSize: { xs: '16px' },
-                lineHeight: { xs: '24px' },
-                letterSpacing: 0,
-                textAlign: 'left',
-                fontWeight: '400',
-                fontStyle: 'normal',
-                display: { xs: 'block', sm: 'flex' },
-              }}
-            >
-              <Typography sx={{ minWidth: 100 }}>{item.date}</Typography>
+              {/* top: { xs: 170, md: 278 },
+                  left: { xs: 10, md: 'auto' }, */}
               <Box
                 sx={{
-                  position: 'relative',
-                  display: { xs: 'none', sm: 'block' },
+                  mx: 2,
+                  color: 'white',
+                  display: 'inline',
+
+                  zIndex: 2,
+                  backgroundColor: 'rgba(255, 255, 255, 0.149)',
+                  padding: '5px 10px',
+                  borderRadius: '8px',
+                  fontSize: { xs: '10px' },
                 }}
               >
+                {item.category.toUpperCase()}
+              </Box>
+              <Typography
+                sx={{
+                  top: { xs: 200, md: 315 },
+                  left: { xs: 20, md: 70 },
+                  color: 'white',
+                  fontFamily: 'Lora',
+                  fontSize: { xs: '24px' },
+                  lineHeight: { xs: '32px' },
+                  letterSpacing: 0,
+                  textAlign: 'left',
+                  fontWeight: '700',
+                  maxWidth: 600,
+                }}
+              >
+                {item.name}
+              </Typography>
+              <Box
+                sx={{
+                  top: { xs: 350, md: 422 },
+                  left: { xs: 20, md: 70 },
+                  color: '#E5E5E5',
+                  fontFamily: 'Lora',
+                  fontSize: { xs: '16px' },
+                  lineHeight: { xs: '24px' },
+                  letterSpacing: 0,
+                  textAlign: 'left',
+                  fontWeight: '400',
+                  fontStyle: 'normal',
+                  display: { xs: 'block', sm: 'flex' },
+                }}
+              >
+                <Typography sx={{ minWidth: 100 }}>{item.date}</Typography>
                 <Box
                   sx={{
-                    position: 'absolute',
-                    top: 10,
-                    width: '30px',
-                    height: '0px',
-                    border: '1px solid #E5E5E5',
+                    position: 'relative',
+                    display: { xs: 'none', sm: 'block' },
                   }}
-                />
+                >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 10,
+                      width: '30px',
+                      height: '0px',
+                      border: '1px solid #E5E5E5',
+                    }}
+                  />
+                </Box>
+                <Typography sx={{ ml: { xs: 0, sm: 6 }, maxWidth: 500 }}>
+                  {item.description}
+                </Typography>
               </Box>
-              <Typography sx={{ ml: { xs: 0, sm: 6 }, maxWidth: 500 }}>
-                {item.description}
-              </Typography>
             </Box>
           </Box>
         ))}
       </Carousel>
-      <Box sx={{ m: { md: '100px 70px' }}}>
+      <Box sx={{ m: {xs:'50px auto',md:'100px auto' },width: {xs:'95%',sm:'590px', md: '800px', lg: '1100px', xl: '1400px' },border:'1px solid red' }}>
         <Typography
           component="h2"
           sx={{
@@ -254,48 +265,53 @@ const Home = () => {
             </Typography>
           </Stack>
         </Stack>
-        <Box sx={{ display: { xs: 'block', md: 'none' },}}>
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
           <Stack
-           sx={{
-            flexDirection: 'row',
-            mt: '30px',
-            justifyContent: 'space-between',
-          }}>
-
-          <Stack>
-
-          <FormControl size="small" sx={{ m: 1, minWidth: 160 }}>
-            <InputLabel id="filter-category">Filter Category</InputLabel>
-            <Select
-              labelId="filter-category"
-              id="simple-select"
-              label="Filter Category"
-              onChange={handleChange}
-              defaultValue="View All"
+            sx={{
+              flexDirection: 'row',
+              mt: '30px',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Stack>
+              <FormControl size="small" sx={{ m: 1, minWidth: 160 }}>
+                <InputLabel id="filter-category">Filter Category</InputLabel>
+                <Select
+                  labelId="filter-category"
+                  id="simple-select"
+                  label="Filter Category"
+                  onChange={handleChange}
+                  defaultValue="View All"
+                >
+                  {categories.map(c => (
+                    <MenuItem
+                      sx={{ color: selectedCategory === c.name && '#D4A373' }}
+                      value={c.name}
+                    >
+                      {c.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
+            <Stack>
+              <Typography
+                sx={{
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  fontSize: '16px',
+                  lineHeight: '25px',
+                  color:
+                    selectedCategory === 'View All' ? '#D4A373' : '#495057',
+                  fontFamily: 'Lora',
+                  cursor: 'pointer',
+                }}
+                onClick={() => setSelectedCategory('View All')}
               >
-                {categories.map(c => <MenuItem sx={{color:selectedCategory===c.name && '#D4A373'}} value={c.name}>{c.name}</MenuItem>)}
-              
-        
-            </Select>
-          </FormControl>
-              </Stack>
-          <Stack>
-            <Typography
-              sx={{
-                fontStyle: 'normal',
-                fontWeight: 700,
-                fontSize: '16px',
-                lineHeight: '25px',
-                color: selectedCategory === 'View All' ? '#D4A373' : '#495057',
-                fontFamily: 'Lora',
-                cursor: 'pointer',
-              }}
-              onClick={() => setSelectedCategory('View All')}
-              >
-              View All
-            </Typography>
+                View All
+              </Typography>
+            </Stack>
           </Stack>
-              </Stack>
         </Box>
         <Box spacing={2}>
           <Box
@@ -312,96 +328,102 @@ const Home = () => {
               mx: 'auto',
             }}
           >
-            {filtered?.map(blog => (
-              <Card sx={{ width: 345, height: 457, position: 'relative' }}>
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      alt="Emre Sharp"
-                      aria-label="blog"
-                      sx={{ bgcolor: red[500] }}
-                    />
-                  }
-                  title={blog.author}
-                  subheader={blog.last_updated_date.slice(0, 10)}
-                />
-                <div
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => openDetails(blog.slug)}
-                >
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={blog.image}
-                    alt={blog.title}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {blog.title}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: '3',
-                        WebkitBoxOrient: 'vertical',
-                      }}
-                      variant="body2"
-                      color="text.secondary"
-                    >
-                      {blog.content}
-                    </Typography>
-                  </CardContent>
-                </div>
-                <CardActions
-                  disableSpacing
-                  sx={{
-                    width: '90%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    position: 'absolute',
-                    bottom: '5px',
-                    left: '5px',
-                  }}
-                >
-                  <div>
-                    <IconButton aria-label="add to favorites">
-                      <FavoriteIcon
-                        sx={{
-                          color:
-                            blog.like_post?.filter(
-                              like => like.user_id === currentUser.id
-                            )[0]?.user_id && 'red',
-                        }}
+            {loading ? (
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              filtered?.map(blog => (
+                <Card sx={{ width: 345, height: 457, position: 'relative' }}>
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        alt="Emre Sharp"
+                        aria-label="blog"
+                        sx={{ bgcolor: red[500] }}
                       />
-                      <Typography sx={{ marginLeft: 1 }}>
-                        {blog.like_count}
-                      </Typography>
-                    </IconButton>
-                    <IconButton aria-label="comment">
-                      <ChatOutlinedIcon />
-                      <Typography sx={{ marginLeft: 1 }}>
-                        {blog.comment_count}
-                      </Typography>
-                    </IconButton>
-                    <IconButton aria-label="view">
-                      <RemoveRedEyeOutlinedIcon />
-                      <Typography sx={{ marginLeft: 1 }}>
-                        {blog.post_view_count}
-                      </Typography>
-                    </IconButton>
-                  </div>
-                  <div>
-                    <Badge
-                      badgeContent={blog.category}
-                      color="primary"
-                      sx={{ mx: 2 }}
+                    }
+                    title={blog.author}
+                    subheader={blog.last_updated_date.slice(0, 10)}
+                  />
+                  <div
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => openDetails(blog.slug)}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="194"
+                      image={blog.image}
+                      alt={blog.title}
                     />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {blog.title}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: '3',
+                          WebkitBoxOrient: 'vertical',
+                        }}
+                        variant="body2"
+                        color="text.secondary"
+                      >
+                        {blog.content}
+                      </Typography>
+                    </CardContent>
                   </div>
-                </CardActions>
-              </Card>
-            ))}
+                  <CardActions
+                    disableSpacing
+                    sx={{
+                      width: '90%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      position: 'absolute',
+                      bottom: '5px',
+                      left: '5px',
+                    }}
+                  >
+                    <div>
+                      <IconButton aria-label="add to favorites">
+                        <FavoriteIcon
+                          sx={{
+                            color:
+                              blog.like_post?.filter(
+                                like => like.user_id === currentUser.id
+                              )[0]?.user_id && 'red',
+                          }}
+                        />
+                        <Typography sx={{ marginLeft: 1 }}>
+                          {blog.like_count}
+                        </Typography>
+                      </IconButton>
+                      <IconButton aria-label="comment">
+                        <ChatOutlinedIcon />
+                        <Typography sx={{ marginLeft: 1 }}>
+                          {blog.comment_count}
+                        </Typography>
+                      </IconButton>
+                      <IconButton aria-label="view">
+                        <RemoveRedEyeOutlinedIcon />
+                        <Typography sx={{ marginLeft: 1 }}>
+                          {blog.post_view_count}
+                        </Typography>
+                      </IconButton>
+                    </div>
+                    <div>
+                      <Badge
+                        badgeContent={blog.category}
+                        color="primary"
+                        sx={{ mx: 2 }}
+                      />
+                    </div>
+                  </CardActions>
+                </Card>
+              ))
+            )}
           </Box>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>

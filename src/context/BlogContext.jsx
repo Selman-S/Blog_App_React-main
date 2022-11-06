@@ -11,6 +11,8 @@ const BlogContextProvider = (props) => {
 
   const [blogs, setBlogs] = useState([]);
 
+  const [loading, setLoading] = useState(true)
+
   const [categories, setCategories] = useState([]);
 
   const [page, setPage] = useState(1000);
@@ -25,6 +27,7 @@ const BlogContextProvider = (props) => {
     try {
       const res = await axios.get(blogUrl)
       setBlogs(res.data.results)
+      setLoading(false)
       return res;
     } catch (error) {
       toastErrorNotify(error.message)
@@ -195,7 +198,8 @@ const BlogContextProvider = (props) => {
     updatePost,
     deletePost,
     usersAllPosts,
-    userPosts
+    userPosts,
+    loading
   }
 
 
